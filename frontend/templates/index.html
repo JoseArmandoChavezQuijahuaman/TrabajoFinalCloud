@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<title>Cloudlit</title>
+<style type="text/css" media="screen">
+    #editor {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 40%;
+        left: 0;
+    }
+    #ghost-editor {
+        height: 60vh;
+    }
+    #send {
+        margin-top: 20px;
+    }
+    #output {
+        padding: 5px;
+        margin-top: 20px;
+        border:1px solid black;
+        min-height: 50px;
+    }
+</style>
+</head>
+<body>
+
+<div id="editor">print("Hello Cloudlit World")</div>
+<div id="ghost-editor"></div>
+
+<button id="send" onclick="send()">Run</button>
+<p id="output"></p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.5/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/python");
+    function send() {
+        var code = editor.getValue();
+        console.log(code);
+        const Http = new XMLHttpRequest();
+        const hostname = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
+        const url = hostname + "/" + "python";
+        Http.open("POST", url);
+        Http.responseType = 'json';
+
+        var FD  = new FormData();
+        FD.append("code", code);
+        let r = (Math.random() + 1).toString(36).substring(7);
+        FD.append("filename", r);
+        FD.append("extension", "py");
+
+        Http.send(FD);
+        Http.onreadystatechange = (e) => {
+            const response = Http.response;
+            if (response && "output" in response) {
+                document.getElementById("output").innerHTML = response["output"].join("<br/>");
+                console.log(response["output"].join("<br/>"))
+            }
+        }
+    }
+</script>
+</body>
+</html>
