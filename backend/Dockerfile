@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 EXPOSE 3005
 
 # Run app.py when the container launches
-CMD ["python","-u","app.py"]
+CMD ["python", "app.py"]
