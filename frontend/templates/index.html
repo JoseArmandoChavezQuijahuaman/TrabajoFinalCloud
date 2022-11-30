@@ -40,9 +40,9 @@
         var code = editor.getValue();
         console.log(code);
         const Http = new XMLHttpRequest();
-        const hostname = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
-        const url = hostname + "/" + "python";
-        Http.open("POST", url);
+        const hostname = "http://24.199.69.169:3000/api";
+        const url = "";
+        Http.open("POST", hostname);
         Http.responseType = 'json';
 
         var FD  = new FormData();
@@ -50,7 +50,6 @@
         let r = (Math.random() + 1).toString(36).substring(7);
         FD.append("filename", r);
         FD.append("extension", "py");
-
         Http.send(FD);
         Http.onreadystatechange = (e) => {
             const response = Http.response;
